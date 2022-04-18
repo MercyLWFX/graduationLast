@@ -30,9 +30,10 @@ public class SysUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
+
     @ApiModelProperty("id")
     @TableId
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
 
     @ApiModelProperty("用户名")

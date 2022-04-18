@@ -19,4 +19,6 @@ public interface ISysUserService extends IService<SysUser> {
     boolean registers(UserDTo user);
 
     void updatePassword(UserPasswordDTO userPasswordDTO);
+
+    Boolean pay(UserDTo userDTo);
 }

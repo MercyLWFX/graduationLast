@@ -94,6 +94,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
     }
 
+    @Override
+    public Boolean pay(UserDTo userDTo) {
+        int update=userMapper.updateUserMoney(userDTo);
+        if (update<1){
+            return false;
+        }
+        return true;
+    }
+
     public SysUser getUserInfo(UserDTo user){
         QueryWrapper<SysUser> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("username",user.getUsername());
@@ -104,7 +113,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         } catch (Exception e) {
             throw new ServiceException(Constants.CODE_500,"系统错误");
         }
-
         return one;
     }
 

@@ -38,6 +38,17 @@ public class SysUserController {
     SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
 
 
+
+
+    @PostMapping("/pay")
+    public Result pay(@RequestBody UserDTo user){
+        if(userService.pay(user)) {
+            return Result.success();
+        }else {
+            return Result.error(Constants.CODE_500,"支付失败，请稍后再试");
+        }
+    }
+
     /**
      * 修改密码
      * @param userPasswordDTO
@@ -48,7 +59,6 @@ public class SysUserController {
         userService.updatePassword(userPasswordDTO);
         return Result.success();
     }
-
 
     @GetMapping("/person/{username}")
     public Result delete(@PathVariable String username) {
