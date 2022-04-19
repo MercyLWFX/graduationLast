@@ -40,7 +40,7 @@ public class UserExamController {
         userExam.setUserId(userId);
         userExam.setExamId(examId);
         userExam.setIspay(ispay);
-        System.out.println("------------------------------------------"+userExam);
+        System.out.println("------------"+userExam);
         QueryWrapper<UserExam> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("user_id",userId);
         queryWrapper.eq("exam_id",examId);
