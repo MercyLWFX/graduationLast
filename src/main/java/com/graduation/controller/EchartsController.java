@@ -6,12 +6,18 @@ import cn.hutool.core.date.Quarter;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.graduation.common.Constants;
 import com.graduation.common.Result;
+import com.graduation.entity.Competition;
 import com.graduation.entity.Files;
+import com.graduation.entity.QualificationExam;
 import com.graduation.entity.SysUser;
+import com.graduation.mapper.CompetitionMapper;
 import com.graduation.mapper.FilesMapper;
 
+import com.graduation.mapper.QualificationExamMapper;
+import com.graduation.mapper.SysUserMapper;
 import com.graduation.service.ISysUserService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +45,35 @@ public class EchartsController {
     @Resource
     private FilesMapper fileMapper;
 
+    @Resource
+    private QualificationExamMapper examMapper;
+
+    @Resource
+    private CompetitionMapper competitionMapper;
+
+    @Resource
+    private SysUserMapper userMapper;
+
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @GetMapping("/userCount")
+    public Result getUserCount(){
+        QueryWrapper<SysUser> queryWrapper=new QueryWrapper<>();
+        return Result.success(userMapper.selectCount(queryWrapper));
+    }
+
+    @GetMapping("/examCount")
+    public Result getExamCount(){
+        QueryWrapper<QualificationExam> queryWrapper=new QueryWrapper<>();
+        return Result.success(examMapper.selectCount(queryWrapper));
+    }
+
+    @GetMapping("/competitionCount")
+    public Result getCompetitionCount(){
+        QueryWrapper<Competition> queryWrapper=new QueryWrapper<>();
+        return Result.success(competitionMapper.selectCount(queryWrapper));
+    }
 
     @GetMapping("/example")
     public Result get() {

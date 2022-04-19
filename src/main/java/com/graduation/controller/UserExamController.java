@@ -11,7 +11,9 @@ import com.graduation.utils.TokenUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
@@ -34,6 +36,20 @@ public class UserExamController {
 
     @Resource
     private IUserExamService userExamService;
+
+
+    @GetMapping("/statistics")
+    public Result statistics(@RequestParam Long examId){
+        Double avg=userExamService.avg(examId);
+//        Double mode=userExamService.mode(examId);
+        Double max=userExamService.max(examId);
+        Double min=userExamService.min(examId);
+        Map<String,Double> info=new HashMap<>();
+        info.put("avg",avg);
+        info.put("max",max);
+        info.put("min",min);
+        return Result.success(info);
+    }
 
     @GetMapping("/pre")
     public Result pre(@RequestParam Long userId,

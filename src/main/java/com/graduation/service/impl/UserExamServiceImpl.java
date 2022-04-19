@@ -85,4 +85,24 @@ public class UserExamServiceImpl extends ServiceImpl<UserExamMapper, UserExam> i
     public List<SysUser> getApplicants(Long examId) {
         return userExamMapper.selectAllApplicants(examId);
     }
+
+    @Override
+    public Double avg(Long examId) {
+        return userExamMapper.avg(examId);
+    }
+
+//    @Override
+//    public Double mode(Long examId) {
+//        return userExamMapper.mode(examId);
+//    }
+
+    @Override
+    public Double max(Long examId) {
+        return userExamMapper.max(examId);
+    }
+
+    @Override
+    public Double min(Long examId) {
+        return userExamMapper.min(examId);
+    }
 }

@@ -7,6 +7,7 @@ import com.graduation.entity.UserExam;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
@@ -36,4 +37,16 @@ public interface UserExamMapper extends BaseMapper<UserExam> {
     List<Competition> selectAllPayCompetition(Long userId);
 
     List<SysUser> selectAllApplicants(Long examId);
+
+    @Select("select round( avg( score ), 2 ) avg  from user_exam where exam_id=#{examId} and ispay=1")
+    Double avg(Long examId);
+
+//    @Select("select max(count) from (select score,count(score) count from user_exam where exam_id=#{examId} and ispay=1 group by score)")
+//    Double mode(Long examId);
+
+    @Select("select max(score) from user_exam where exam_id=#{examId} and ispay=1")
+    Double max(Long examId);
+
+    @Select("select min(score) from user_exam where exam_id=#{examId} and ispay=1")
+    Double min(Long examId);
 }

@@ -31,4 +31,12 @@ public interface IUserExamService extends IService<UserExam> {
     List<Competition> seleceAllPayCompetition(Long userId);
 
     List<SysUser> getApplicants(Long examId);
+
+    Double avg(Long examId);
+
+//    Double mode(Long examId);
+
+    Double max(Long examId);
+
+    Double min(Long examId);
 }
