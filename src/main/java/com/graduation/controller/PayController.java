@@ -1,6 +1,5 @@
 package com.graduation.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayTradePrecreateRequest;
@@ -22,12 +21,11 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Controller
 @Slf4j
-public class Test {
+public class PayController {
     @Autowired
     private AlipayClient alipayClient;
     @Autowired
