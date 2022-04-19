@@ -1,6 +1,9 @@
 package com.graduation.controller;
 
 
+import cn.hutool.core.lang.TypeReference;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.graduation.common.Constants;
@@ -9,6 +12,9 @@ import com.graduation.config.AuthAccess;
 import com.graduation.entity.SysUser;
 import com.graduation.service.IQualificationClassService;
 import com.graduation.utils.TokenUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -35,6 +41,10 @@ public class QualificationClassController {
     @Resource
     private IQualificationClassService classService;
 
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
+
     // 新增或者更新
 //    @PostMapping
 //    public Result save(@RequestBody QualificationClass qualificationClass) {
@@ -58,9 +68,26 @@ public class QualificationClassController {
         return Result.success();
     }
 
-    @GetMapping
+    @AuthAccess
+    @GetMapping("/all")
     public Result findAll() {
-        return Result.success(classService.list());
+        //        1.从缓存中获取数据
+        String jsonStr = redisTemplate.opsForValue().get(Constants.CLASS_KEY);
+        List<QualificationClass> qualificationClasses;
+        if (StrUtil.isBlank(jsonStr)){
+//            2.取出来的json是空的
+            qualificationClasses=  classService.findAll();
+//            3从数据库取出数据之后，
+//            4.再去缓存到redis
+            redisTemplate.opsForValue().set(Constants.CLASS_KEY,JSONUtil.toJsonStr(qualificationClasses));
+        }else {
+//            5.从redis缓存中获取数据
+            qualificationClasses = JSONUtil.toBean(jsonStr, new TypeReference<List<QualificationClass>>() {
+            }, true);
+        }
+
+        return Result.success(qualificationClasses);
+//        return Result.success(classService.list());
     }
 
     @GetMapping("/{id}")
@@ -85,11 +112,14 @@ public class QualificationClassController {
 
     @AuthAccess
     @GetMapping("/pages")
+//    @Cacheable(value = "QualificationClass",key="#categoryId")
     public Result findPages(@RequestParam Integer pageNum,
                                     @RequestParam Integer pageSize,
                                     @RequestParam(required = false) String categoryName
                                    
     ) {
+
+
 
         return Result.success(classService.findPage(new Page<>(pageNum,pageSize),categoryName));
     }

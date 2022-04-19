@@ -3,11 +3,11 @@
 <mapper namespace="com.graduation.mapper.QualificationClassMapper">
 
     <resultMap id="pageQualification" type="com.graduation.entity.QualificationClass">
-        <result column="category_id" property="categoryId" />
-        <result column="category_name" property="categoryName" />
-        <result column="classification" property="classification" />
-        <result column="ascription" property="ascription" />
-        <result column="description" property="description" />
+        <result column="category_id" property="categoryId"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="classification" property="classification"/>
+        <result column="ascription" property="ascription"/>
+        <result column="description" property="description"/>
         <collection property="exams" javaType="java.util.ArrayList" ofType="com.graduation.entity.QualificationExam">
             <result column="exam_name" property="examName"/>
             <result column="classes" property="classes"/>
@@ -24,5 +24,29 @@
                 qualification_class.category_name=#{categoryName}
             </if>
         </where>
+    </select>
+
+
+
+
+    <resultMap id="allQualification" type="com.graduation.entity.QualificationClass">
+        <result column="category_id" property="categoryId"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="classification" property="classification"/>
+        <result column="ascription" property="ascription"/>
+        <result column="description" property="description"/>
+        <collection property="exams" javaType="java.util.ArrayList" ofType="com.graduation.entity.QualificationExam">
+            <result column="exam_name" property="examName"/>
+            <result column="classes" property="classes"/>
+            <result column="id" property="id"/>
+        </collection>
+    </resultMap>
+
+
+    <select id="findAll" resultMap="allQualification">
+        select qualification_class.*, qualification_exam.exam_name, qualification_exam.classes
+        from qualification_class
+                 left join qualification_exam
+                           on qualification_class.ascription = qualification_exam.ascription
     </select>
 </mapper>

@@ -103,6 +103,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return true;
     }
 
+    @Override
+    public Boolean changeUsername(SysUser one) {
+        if (userMapper.changeUsername(one)){
+            return true;
+        }else {
+            return false;
+        }
+
+
+    }
+
     public SysUser getUserInfo(UserDTo user){
         QueryWrapper<SysUser> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("username",user.getUsername());

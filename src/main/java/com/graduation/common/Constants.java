@@ -8,6 +8,9 @@ public interface Constants {
     String CODE_600 = "600";//其他业务异常
     String DICT_TYPE_ICON = "icon";
 
+    String CLASS_KEY="CLASS_FRONT_ALL";
+
+
 
 
 

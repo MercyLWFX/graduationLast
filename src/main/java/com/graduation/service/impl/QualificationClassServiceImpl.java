@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -28,5 +29,10 @@ public class QualificationClassServiceImpl extends ServiceImpl<QualificationClas
     public Page<QualificationClass> findPage(Page<QualificationClass> page, String categoryName) {
 
         return qualificationClassMapper.findPage(page,categoryName);
+    }
+
+    @Override
+    public List<QualificationClass> findAll() {
+        return qualificationClassMapper.findAll();
     }
 }

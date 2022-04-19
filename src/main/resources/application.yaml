@@ -40,6 +40,7 @@ spring:
       pool:
         max-active: 16
         min-idle: 8
+
   jdbc:
     template:
       query-timeout: 3

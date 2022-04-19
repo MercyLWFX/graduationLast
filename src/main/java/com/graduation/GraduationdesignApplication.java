@@ -4,12 +4,14 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @ServletComponentScan(basePackages = "com.graduation")
 @RestController
 @SpringBootApplication
+//@EnableCaching
 public class GraduationdesignApplication {
 
     public static void main(String[] args) {

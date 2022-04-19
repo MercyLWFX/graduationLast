@@ -2,7 +2,10 @@ package com.graduation.service.impl;
 
 import com.graduation.entity.Competition;
 import com.graduation.entity.QualificationExam;
+import com.graduation.entity.SysUser;
 import com.graduation.entity.UserExam;
+import com.graduation.mapper.CompetitionMapper;
+import com.graduation.mapper.QualificationExamMapper;
 import com.graduation.mapper.UserExamMapper;
 import com.graduation.service.IUserExamService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -25,6 +28,12 @@ public class UserExamServiceImpl extends ServiceImpl<UserExamMapper, UserExam> i
     @Resource
     private UserExamMapper userExamMapper;
 
+    @Resource
+    private QualificationExamMapper qualificationExamMapper;
+
+    @Resource
+    private CompetitionMapper competitionMapper;
+
     @Override
     public List<QualificationExam> selectByUserOrder(Long userId) {
 //        得到用户已经预报名比赛目录的信息
@@ -39,6 +48,13 @@ public class UserExamServiceImpl extends ServiceImpl<UserExamMapper, UserExam> i
     @Override
     public Boolean changeIsPay(Long userId, Long examId) {
         if (userExamMapper.changeIsPay(userId,examId)>0){
+            if (examId.toString().length()>=10){
+                int count=competitionMapper.currentCount(examId)+1;
+                competitionMapper.updateCurrentCount(examId,count);
+            }else {
+                int count=qualificationExamMapper.currentCount(examId)+1;
+                qualificationExamMapper.updateCurrentCount(examId,count);
+            }
             return true;
         }else {
             return false;
@@ -63,5 +79,10 @@ public class UserExamServiceImpl extends ServiceImpl<UserExamMapper, UserExam> i
     @Override
     public List<Competition> seleceAllPayCompetition(Long userId) {
         return userExamMapper.selectAllPayCompetition(userId);
+    }
+
+    @Override
+    public List<SysUser> getApplicants(Long examId) {
+        return userExamMapper.selectAllApplicants(examId);
     }
 }

@@ -2,6 +2,7 @@ package com.graduation.service;
 
 import com.graduation.entity.Competition;
 import com.graduation.entity.QualificationExam;
+import com.graduation.entity.SysUser;
 import com.graduation.entity.UserExam;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -28,4 +29,6 @@ public interface IUserExamService extends IService<UserExam> {
     List<Competition> selectByUserCompetitionOrder(Long userId);
 
     List<Competition> seleceAllPayCompetition(Long userId);
+
+    List<SysUser> getApplicants(Long examId);
 }

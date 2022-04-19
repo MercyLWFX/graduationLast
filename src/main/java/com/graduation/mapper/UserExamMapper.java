@@ -2,6 +2,7 @@ package com.graduation.mapper;
 
 import com.graduation.entity.Competition;
 import com.graduation.entity.QualificationExam;
+import com.graduation.entity.SysUser;
 import com.graduation.entity.UserExam;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Delete;
@@ -33,4 +34,6 @@ public interface UserExamMapper extends BaseMapper<UserExam> {
     List<Competition> selectAllCompetition(Long userId);
 
     List<Competition> selectAllPayCompetition(Long userId);
+
+    List<SysUser> selectAllApplicants(Long examId);
 }

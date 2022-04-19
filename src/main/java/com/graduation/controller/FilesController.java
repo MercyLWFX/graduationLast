@@ -105,7 +105,7 @@ public class FilesController {
             QueryWrapper<Files> query = new QueryWrapper<>();
             queryWrapper.eq("userid", usersId);
             queryWrapper.eq("md5", md5);
-            List<Files> same = fileMapper.selectList(queryWrapper);
+            List<Files> same = fileMapper.selectList(query);
 //        获得当前上传文件的用户
             if (same.size() == 0) {
                 fileMapper.insert(saveFiles);
@@ -116,7 +116,7 @@ public class FilesController {
             Long usersId=null;
             queryWrapper.eq("userid", usersId);
             queryWrapper.eq("md5", md5);
-            List<Files> same = fileMapper.selectList(queryWrapper);
+            List<Files> same = fileMapper.selectList(q);
             if (same.size() == 0) {
                 fileMapper.insert(saveFiles);
                 return url;

@@ -65,4 +65,7 @@ public class Competition implements Serializable {
     @ApiModelProperty("企业id")
     private Long userId;
 
+    @TableField(exist = false)
+    private Double score;
+
 }

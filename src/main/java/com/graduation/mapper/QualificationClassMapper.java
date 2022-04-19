@@ -5,6 +5,8 @@ import com.graduation.entity.QualificationClass;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -16,4 +18,6 @@ import org.apache.ibatis.annotations.Param;
 public interface QualificationClassMapper extends BaseMapper<QualificationClass> {
 
     Page<QualificationClass> findPage(Page<QualificationClass> page, @Param("categoryName") String categoryName);
+
+    List<QualificationClass> findAll();
 }

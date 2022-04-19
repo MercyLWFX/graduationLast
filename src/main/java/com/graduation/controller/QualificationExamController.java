@@ -7,6 +7,8 @@ import com.graduation.common.Constants;
 import com.graduation.common.Result;
 import com.graduation.config.AuthAccess;
 import com.graduation.entity.QualificationClass;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -34,9 +36,13 @@ public class QualificationExamController {
     @Resource
     private IQualificationExamService examService;
 
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id) {
         if (examService.removeById(id)){
+            flushRedis(Constants.CLASS_KEY);
             return Result.success();
         }else {
             return Result.error(Constants.CODE_600,"此项不存在");
@@ -48,6 +54,7 @@ public class QualificationExamController {
     @PostMapping("/del/batch")
     public Result deleteBatch(@RequestBody List<Integer> ids) {
         if (examService.removeByIds(ids)){
+            flushRedis(Constants.CLASS_KEY);
             return Result.success();
         }else {
             return Result.error(Constants.CODE_600,"参数错误");
@@ -90,11 +97,9 @@ public class QualificationExamController {
             return Result.error(Constants.CODE_401,"名字被占用已被占用");
         }
         examService.saveOrUpdate(user);
+        flushRedis(Constants.CLASS_KEY);
         return Result.success();
     }
-
-
-
 
     @AuthAccess
     @GetMapping("/pages")
@@ -119,6 +124,11 @@ public class QualificationExamController {
 //        System.out.println(userIPage);
 
         return userIPage;
+    }
+
+//    删除缓存
+    private void flushRedis(String key){
+        redisTemplate.delete(key);
     }
 
 }

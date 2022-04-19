@@ -21,4 +21,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
     @Update("update sys_user set money = #{money} where id=#{id} ")
     int updateUserMoney(UserDTo userDTo);
+
+    @Update("update sys_user set rolename='ROLE_COMPANY' where id=#{id}")
+    boolean changeUsername(SysUser one);
 }

@@ -44,11 +44,17 @@ public class UserExam implements Serializable {
     @ApiModelProperty("是否缴费")
     private Boolean ispay;
 
+    @ApiModelProperty("成绩")
+    private Double score;
+
     @TableField(exist = false)
     private List<QualificationExam> exams;
 
     @TableField(exist = false)
     private List<Competition> competitions;
+
+    @TableField(exist = false)
+    private List<SysUser> users;
 
 
 }

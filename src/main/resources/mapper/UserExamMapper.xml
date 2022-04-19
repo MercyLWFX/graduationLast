@@ -3,9 +3,9 @@
 <mapper namespace="com.graduation.mapper.UserExamMapper">
 
 
-<!--  用于查找用户加入购物车的资格证书并要为之进行支付的项目  -->
+    <!--  用于查找用户加入购物车的资格证书并要为之进行支付的项目  -->
     <resultMap id="userUnPayQualification" type="com.graduation.entity.UserExam">
-        <result column="user_id" property="userId" />
+        <result column="user_id" property="userId"/>
         <collection property="exams" javaType="java.util.ArrayList" ofType="com.graduation.entity.QualificationExam">
             <result column="id" property="id"/>
             <result column="exam_name" property="examName"/>
@@ -13,7 +13,6 @@
             <result column="imgUrl" property="imgurl"/>
         </collection>
     </resultMap>
-
     <select id="getQualificationListByUserId" resultMap="userUnPayQualification">
         select user_exam.user_id,qualification_exam.* from user_exam
         left join qualification_exam
@@ -27,10 +26,9 @@
     </select>
 
 
-
-<!--  用于查找用户已经支付的项目  -->
+    <!--  用于查找用户已经支付的项目  -->
     <resultMap id="userPayQualification" type="com.graduation.entity.UserExam">
-        <result column="user_id" property="userId" />
+        <result column="user_id" property="userId"/>
         <collection property="exams" javaType="java.util.ArrayList" ofType="com.graduation.entity.QualificationExam">
             <result column="id" property="id"/>
             <result column="exam_name" property="examName"/>
@@ -52,9 +50,9 @@
     </select>
 
 
-
+    <!--    用于查找用户未支付的competition-->
     <resultMap id="userUnPayCompetition" type="com.graduation.entity.UserExam">
-        <result column="user_id" property="userId" />
+        <result column="user_id" property="userId"/>
         <collection property="competitions" javaType="java.util.ArrayList" ofType="com.graduation.entity.Competition">
             <result column="id" property="id"/>
             <result column="examName" property="name"/>
@@ -62,9 +60,9 @@
             <result column="imgurl" property="imgurl"/>
         </collection>
     </resultMap>
-
     <select id="selectAllCompetition" resultMap="userUnPayCompetition">
-        select user_exam.user_id,competition.id,competition.name as examName,competition.expense,competition.imgurl from user_exam
+        select user_exam.user_id,competition.id,competition.name as examName,competition.expense,competition.imgurl from
+        user_exam
         left join competition
         on user_exam.exam_id=competition.id
         <where>
@@ -75,21 +73,20 @@
         </where>
     </select>
 
+    <!--    用于查找用户已经支付的competition-->
     <resultMap id="userPayCompetition" type="com.graduation.entity.UserExam">
-        <result column="user_id" property="userId" />
+        <result column="user_id" property="userId"/>
         <collection property="competitions" javaType="java.util.ArrayList" ofType="com.graduation.entity.Competition">
             <result column="id" property="id"/>
             <result column="name" property="name"/>
+            <result column="score" property="score"/>
             <result column="end" property="end"/>
             <result column="expense" property="expense"/>
             <result column="imgurl" property="imgurl"/>
         </collection>
     </resultMap>
-
-
-
     <select id="selectAllPayCompetition" resultMap="userPayCompetition">
-        select user_exam.user_id,competition.* from user_exam
+        select user_exam.*,competition.* from user_exam
         left join competition
         on user_exam.exam_id=competition.id
         <where>
@@ -98,6 +95,25 @@
             </if>
             and user_exam.ispay=1
         </where>
+    </select>
+
+
+    <!--  查询已缴费的用户  -->
+    <resultMap id="applicantsCompetition" type="com.graduation.entity.UserExam">
+        <result column="exam_id" property="examId"/>
+        <collection property="competitions" javaType="java.util.ArrayList" ofType="com.graduation.entity.SysUser">
+            <result column="id" property="id"/>
+            <result column="username" property="username"/>
+            <result column="avatar_url" property="avatarUrl"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectAllApplicants" resultMap="applicantsCompetition">
+        select user_exam.exam_id,sys_user.username, sys_user.avatar_url,sys_user.id
+        from user_exam
+                 left join sys_user on user_exam.user_id = sys_user.id
+        where user_exam.exam_id = #{examId}
+          and ispay = 1
     </select>
 
 

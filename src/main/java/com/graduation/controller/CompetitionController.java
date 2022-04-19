@@ -92,15 +92,44 @@ public class CompetitionController {
                            @RequestParam Integer pageSize,
                            @RequestParam(required = false) String name,
                            @RequestParam(required = false) String types) {
-        SysUser sysUser = TokenUtils.getCurrentUser();
+//        SysUser sysUser = TokenUtils.getCurrentUser();
         QueryWrapper<Competition> queryWrapper = new QueryWrapper<>();
         if (name != null) {
-            queryWrapper.eq("name", name);
-            queryWrapper.eq("user_id", sysUser.getId());
+            queryWrapper.like("name", name);
         }
         if (types != null) {
             queryWrapper.eq("types", types);
         }
+//        if (!sysUser.getRolename().equals("ROLE_ADMIN")){
+////                如果当前登录的人不是admin，则竞赛信息只能查看本人发布的
+////                只有admin才能查看所有的竞赛信息
+//            queryWrapper.eq("user_id", sysUser.getId());
+//        }
+
+        return Result.success(competitionService.page(new Page<>(pageNum, pageSize), queryWrapper));
+    }
+
+
+    @GetMapping("/pages")
+    public Result findPages(@RequestParam Integer pageNum,
+                           @RequestParam Integer pageSize,
+                           @RequestParam(required = false) String name,
+                           @RequestParam(required = false) String types) {
+        SysUser sysUser = TokenUtils.getCurrentUser();
+        QueryWrapper<Competition> queryWrapper = new QueryWrapper<>();
+        if (name != null) {
+            queryWrapper.eq("name", name);
+
+        }
+        if (types != null) {
+            queryWrapper.eq("types", types);
+        }
+        if (!sysUser.getRolename().equals("ROLE_ADMIN")){
+//                如果当前登录的人不是admin，则竞赛信息只能查看本人发布的
+//                只有admin才能查看所有的竞赛信息
+            queryWrapper.eq("user_id", sysUser.getId());
+        }
+
         return Result.success(competitionService.page(new Page<>(pageNum, pageSize), queryWrapper));
     }
 

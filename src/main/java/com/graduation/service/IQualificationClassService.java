@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.graduation.entity.QualificationClass;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -15,4 +17,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IQualificationClassService extends IService<QualificationClass> {
 
     Page<QualificationClass> findPage(Page<QualificationClass> objectPage, String categoryName);
+
+    List<QualificationClass> findAll();
 }
