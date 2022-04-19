@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.graduation.common.Constants;
 import com.graduation.common.Result;
 import com.graduation.config.AuthAccess;
+import com.graduation.entity.SysUser;
+import com.graduation.utils.TokenUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -40,11 +42,11 @@ public class UserExamController {
         userExam.setUserId(userId);
         userExam.setExamId(examId);
         userExam.setIspay(ispay);
-        System.out.println("------------"+userExam);
-        QueryWrapper<UserExam> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("user_id",userId);
-        queryWrapper.eq("exam_id",examId);
-        if (userExamService.getOne(queryWrapper)==null) {
+        System.out.println("------------" + userExam);
+        QueryWrapper<UserExam> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        queryWrapper.eq("exam_id", examId);
+        if (userExamService.getOne(queryWrapper) == null) {
             userExamService.save(userExam);
             return Result.success();
         } else {
@@ -52,27 +54,73 @@ public class UserExamController {
         }
     }
 
+
+    @PostMapping("/changeList")
+    public Result changeList(@RequestBody List<Long> ids) {
+        SysUser sysUser = TokenUtils.getCurrentUser();
+        Long userId = sysUser.getId();
+        for (Long examId : ids) {
+            if (userExamService.changeIsPay(userId, examId)) {
+                continue;
+            } else {
+                return Result.error(Constants.CODE_500, "服务器错误，请稍后再试");
+            }
+        }
+        return Result.success();
+    }
+
+    @GetMapping("/changeOne")
+    public Result changeOne(@RequestParam Long examId) {
+        SysUser sysUser = TokenUtils.getCurrentUser();
+        Long userId = sysUser.getId();
+
+        if (userExamService.changeIsPay(userId, examId)) {
+            return Result.success();
+        } else {
+            return Result.error(Constants.CODE_500, "服务器错误，请稍后再试");
+        }
+    }
+
+    /**
+     * 购物车数据
+     *
+     * @param userId
+     * @return
+     */
     @AuthAccess
     @GetMapping("/prepay")
-    public Result isPre(@RequestParam Long userId){
+    public Result isPre(@RequestParam Long userId) {
         return Result.success(userExamService.selectByUserOrder(userId));
+    }
+
+    @GetMapping("/dopay")
+    public Result isPay(@RequestParam Long userId) {
+        return Result.success(userExamService.seleceAllPay(userId));
     }
 
 
     @DeleteMapping("/del")
-    public Result delete(@RequestParam Long userId,@RequestParam Long examId) {
-        Boolean flag = userExamService.delCart(userId,examId);
-        if (flag){
+    public Result delete(@RequestParam Long userId, @RequestParam Long examId) {
+        Boolean flag = userExamService.delCart(userId, examId);
+        if (flag) {
             return Result.success();
-        }else {
-            return Result.error(Constants.CODE_500,"服务器内部错误,请稍后重试");
+        } else {
+            return Result.error(Constants.CODE_500, "服务器内部错误,请稍后重试");
         }
 
     }
 
     @PostMapping("/del/batch")
-    public Result deleteBatch(@RequestBody List<Integer> ids) {
-        userExamService.removeByIds(ids);
+    public Result deleteBatch(@RequestBody List<Long> ids) {
+//        userExamService.removeByIds(ids);
+        SysUser sysUser = TokenUtils.getCurrentUser();
+        Long useId = sysUser.getId();
+        for (Long num : ids) {
+            QueryWrapper<UserExam> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("user_id", useId);
+            queryWrapper.eq("exam_id", num);
+            userExamService.remove(queryWrapper);
+        }
         return Result.success();
     }
 

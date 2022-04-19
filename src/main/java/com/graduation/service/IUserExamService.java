@@ -19,4 +19,8 @@ public interface IUserExamService extends IService<UserExam> {
     List<QualificationExam> selectByUserOrder(Long userId);
 
     Boolean delCart(Long userId, Long examId);
+
+    Boolean changeIsPay( Long userId, Long examId);
+
+    List<QualificationExam> seleceAllPay(Long userId);
 }

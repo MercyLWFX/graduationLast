@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sun.tracing.dtrace.ArgsAttributes;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -32,9 +33,11 @@ public class UserExam implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @ApiModelProperty("报名者的id")
     private Long userId;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @ApiModelProperty("相关考试id")
     private Long examId;
 

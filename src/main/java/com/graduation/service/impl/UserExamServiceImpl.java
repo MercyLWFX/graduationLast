@@ -34,4 +34,23 @@ public class UserExamServiceImpl extends ServiceImpl<UserExamMapper, UserExam> i
     public Boolean delCart(Long userId, Long examId) {
         return userExamMapper.delCart(userId,examId);
     }
+
+    @Override
+    public Boolean changeIsPay(Long userId, Long examId) {
+        if (userExamMapper.changeIsPay(userId,examId)>0){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    /**
+     * 用于用户已经支付的订单项目查询
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<QualificationExam> seleceAllPay(Long userId) {
+        return userExamMapper.selectAllPay(userId);
+    }
 }

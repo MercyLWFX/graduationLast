@@ -5,6 +5,7 @@ import com.graduation.entity.UserExam;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -22,4 +23,9 @@ public interface UserExamMapper extends BaseMapper<UserExam> {
 
     @Delete("delete from user_exam where user_id=#{userId} and exam_id=#{examId}")
     Boolean delCart(@Param("userId") Long userId,@Param("examId") Long examId);
+
+    @Update("update user_exam set ispay=1 where user_id=#{userId} and exam_id=#{examId}")
+    int changeIsPay(@Param("userId") Long userId, @Param("examId") Long examId);
+
+    List<QualificationExam> selectAllPay(Long userId);
 }

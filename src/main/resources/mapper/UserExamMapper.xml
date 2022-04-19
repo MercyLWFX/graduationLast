@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.graduation.mapper.UserExamMapper">
 
+
+<!--  用于查找用户加入购物车为进行支付的项目  -->
     <resultMap id="userUnPayQualification" type="com.graduation.entity.UserExam">
         <result column="user_id" property="userId" />
-<!--        <result column="exam_id" property="examId" />-->
-<!--        <result column="ispay" property="ispay" />-->
         <collection property="exams" javaType="java.util.ArrayList" ofType="com.graduation.entity.QualificationExam">
             <result column="id" property="id"/>
             <result column="exam_name" property="examName"/>
@@ -25,4 +25,31 @@
             and user_exam.ispay=0
         </where>
     </select>
+
+
+
+<!--  用于查找用户已经支付的项目  -->
+    <resultMap id="userPayQualification" type="com.graduation.entity.UserExam">
+        <result column="user_id" property="userId" />
+        <collection property="exams" javaType="java.util.ArrayList" ofType="com.graduation.entity.QualificationExam">
+            <result column="id" property="id"/>
+            <result column="exam_name" property="examName"/>
+            <result column="end" property="end"/>
+            <result column="expense" property="expense"/>
+            <result column="imgUrl" property="imgurl"/>
+        </collection>
+    </resultMap>
+    <select id="selectAllPay" resultMap="userPayQualification">
+        select user_exam.user_id,qualification_exam.* from user_exam
+        left join qualification_exam
+        on user_exam.exam_id=qualification_exam.id
+        <where>
+            <if test="userId != null and userId!=''">
+                user_exam.user_id=#{userId}
+            </if>
+            and user_exam.ispay=1
+        </where>
+    </select>
+
+
 </mapper>

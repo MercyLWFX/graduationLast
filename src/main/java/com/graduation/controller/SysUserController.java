@@ -37,9 +37,6 @@ public class SysUserController {
     //    生成唯一id
     SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
 
-
-
-
     @PostMapping("/pay")
     public Result pay(@RequestBody UserDTo user){
         if(userService.pay(user)) {
