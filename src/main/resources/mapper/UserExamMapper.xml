@@ -3,7 +3,7 @@
 <mapper namespace="com.graduation.mapper.UserExamMapper">
 
 
-<!--  用于查找用户加入购物车为进行支付的项目  -->
+<!--  用于查找用户加入购物车的资格证书并要为之进行支付的项目  -->
     <resultMap id="userUnPayQualification" type="com.graduation.entity.UserExam">
         <result column="user_id" property="userId" />
         <collection property="exams" javaType="java.util.ArrayList" ofType="com.graduation.entity.QualificationExam">
@@ -43,6 +43,55 @@
         select user_exam.user_id,qualification_exam.* from user_exam
         left join qualification_exam
         on user_exam.exam_id=qualification_exam.id
+        <where>
+            <if test="userId != null and userId!=''">
+                user_exam.user_id=#{userId}
+            </if>
+            and user_exam.ispay=1
+        </where>
+    </select>
+
+
+
+    <resultMap id="userUnPayCompetition" type="com.graduation.entity.UserExam">
+        <result column="user_id" property="userId" />
+        <collection property="competitions" javaType="java.util.ArrayList" ofType="com.graduation.entity.Competition">
+            <result column="id" property="id"/>
+            <result column="examName" property="name"/>
+            <result column="expense" property="expense"/>
+            <result column="imgurl" property="imgurl"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectAllCompetition" resultMap="userUnPayCompetition">
+        select user_exam.user_id,competition.id,competition.name as examName,competition.expense,competition.imgurl from user_exam
+        left join competition
+        on user_exam.exam_id=competition.id
+        <where>
+            <if test="userId != null and userId!=''">
+                user_exam.user_id=#{userId}
+            </if>
+            and user_exam.ispay=0
+        </where>
+    </select>
+
+    <resultMap id="userPayCompetition" type="com.graduation.entity.UserExam">
+        <result column="user_id" property="userId" />
+        <collection property="competitions" javaType="java.util.ArrayList" ofType="com.graduation.entity.Competition">
+            <result column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="end" property="end"/>
+            <result column="expense" property="expense"/>
+            <result column="imgurl" property="imgurl"/>
+        </collection>
+    </resultMap>
+
+
+
+    <select id="selectAllPayCompetition" resultMap="userPayCompetition">
+        select user_exam.user_id,competition.* from user_exam
+        left join competition
+        on user_exam.exam_id=competition.id
         <where>
             <if test="userId != null and userId!=''">
                 user_exam.user_id=#{userId}

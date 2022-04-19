@@ -93,9 +93,19 @@ public class UserExamController {
         return Result.success(userExamService.selectByUserOrder(userId));
     }
 
+    @GetMapping("/prepayII")
+    public Result isPreII(@RequestParam Long userId){
+        return Result.success(userExamService.selectByUserCompetitionOrder(userId));
+    }
+
     @GetMapping("/dopay")
     public Result isPay(@RequestParam Long userId) {
         return Result.success(userExamService.seleceAllPay(userId));
+    }
+
+    @GetMapping("/payCompetition")
+    public Result isPayCompetition(@RequestParam Long userId){
+        return Result.success(userExamService.seleceAllPayCompetition(userId));
     }
 
 

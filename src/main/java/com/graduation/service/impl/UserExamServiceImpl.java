@@ -1,5 +1,6 @@
 package com.graduation.service.impl;
 
+import com.graduation.entity.Competition;
 import com.graduation.entity.QualificationExam;
 import com.graduation.entity.UserExam;
 import com.graduation.mapper.UserExamMapper;
@@ -52,5 +53,15 @@ public class UserExamServiceImpl extends ServiceImpl<UserExamMapper, UserExam> i
     @Override
     public List<QualificationExam> seleceAllPay(Long userId) {
         return userExamMapper.selectAllPay(userId);
+    }
+
+    @Override
+    public List<Competition> selectByUserCompetitionOrder(Long userId) {
+        return userExamMapper.selectAllCompetition(userId);
+    }
+
+    @Override
+    public List<Competition> seleceAllPayCompetition(Long userId) {
+        return userExamMapper.selectAllPayCompetition(userId);
     }
 }

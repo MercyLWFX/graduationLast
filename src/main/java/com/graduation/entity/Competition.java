@@ -53,8 +53,13 @@ public class Competition implements Serializable {
     private String detail;
 
     @ApiModelProperty("比赛地址")
-
     private String address;
+
+    @ApiModelProperty("报名人数")
+    private Integer count;
+
+    @ApiModelProperty("报名费用")
+    private Double expense;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @ApiModelProperty("企业id")

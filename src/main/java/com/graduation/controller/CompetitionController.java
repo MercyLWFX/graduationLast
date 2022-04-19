@@ -4,6 +4,8 @@ package com.graduation.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.graduation.common.Constants;
 import com.graduation.common.Result;
+import com.graduation.config.AuthAccess;
+import com.graduation.entity.QualificationExam;
 import com.graduation.entity.SysUser;
 import com.graduation.utils.SnowflakeIdWorker;
 import com.graduation.utils.TokenUtils;
@@ -39,13 +41,27 @@ public class CompetitionController {
     // 新增或者更新
     @PostMapping("/insert")
     public Result save(@RequestBody Competition competition) {
-        competition.setId(idWorker.nextId());
-        SysUser user= TokenUtils.getCurrentUser();
-        competition.setUserId(user.getId());
-        if (competitionService.saveOrUpdate(competition)){
+        if (competition.getId() == null) {
+            competition.setId(idWorker.nextId());
+            SysUser user = TokenUtils.getCurrentUser();
+            competition.setUserId(user.getId());
+        }
+        if (competitionService.saveOrUpdate(competition)) {
             return Result.success();
+        } else {
+            return Result.error(Constants.CODE_500, "请稍后重试");
+        }
+    }
+
+    @AuthAccess
+    @GetMapping("/detail/{id}")
+    public Result findDetail(@PathVariable Long id){
+        QueryWrapper<Competition> wrapper = new QueryWrapper<>();
+        wrapper.eq("id", id);
+        if (competitionService.getOne(wrapper)!=null){
+            return Result.success(competitionService.getOne(wrapper));
         }else {
-            return Result.error(Constants.CODE_500,"请稍后重试");
+            return Result.error(Constants.CODE_600,"no found");
         }
     }
 
@@ -73,11 +89,26 @@ public class CompetitionController {
 
     @GetMapping("/page")
     public Result findPage(@RequestParam Integer pageNum,
-                           @RequestParam Integer pageSize) {
+                           @RequestParam Integer pageSize,
+                           @RequestParam(required = false) String name,
+                           @RequestParam(required = false) String types) {
+        SysUser sysUser = TokenUtils.getCurrentUser();
         QueryWrapper<Competition> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByDesc("id");
+        if (name != null) {
+            queryWrapper.eq("name", name);
+            queryWrapper.eq("user_id", sysUser.getId());
+        }
+        if (types != null) {
+            queryWrapper.eq("types", types);
+        }
         return Result.success(competitionService.page(new Page<>(pageNum, pageSize), queryWrapper));
     }
 
+    @GetMapping("id")
+    public Result selectById(@RequestParam Long userId) {
+        QueryWrapper<Competition> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        return Result.success(competitionService.list(queryWrapper));
+    }
 }
 

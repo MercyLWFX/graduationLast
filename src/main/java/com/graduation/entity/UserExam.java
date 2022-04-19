@@ -47,5 +47,8 @@ public class UserExam implements Serializable {
     @TableField(exist = false)
     private List<QualificationExam> exams;
 
+    @TableField(exist = false)
+    private List<Competition> competitions;
+
 
 }

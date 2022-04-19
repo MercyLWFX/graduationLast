@@ -1,5 +1,6 @@
 package com.graduation.mapper;
 
+import com.graduation.entity.Competition;
 import com.graduation.entity.QualificationExam;
 import com.graduation.entity.UserExam;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -28,4 +29,8 @@ public interface UserExamMapper extends BaseMapper<UserExam> {
     int changeIsPay(@Param("userId") Long userId, @Param("examId") Long examId);
 
     List<QualificationExam> selectAllPay(Long userId);
+
+    List<Competition> selectAllCompetition(Long userId);
+
+    List<Competition> selectAllPayCompetition(Long userId);
 }
